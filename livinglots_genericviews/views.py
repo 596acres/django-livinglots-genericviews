@@ -79,6 +79,11 @@ class AddGenericMixin(FormMixin):
     content_type_id_key = 'content_type_id'
     object_id_key = 'pk'
 
+    def get_context_data(self, **kwargs):
+        context = super(AddGenericMixin, self).get_context_data(**kwargs)
+        context['content_object'] = self.get_content_object()
+        return context
+
     def get_object_id_key(self):
         return self.object_id_key
 
