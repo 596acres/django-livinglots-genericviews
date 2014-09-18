@@ -1,8 +1,7 @@
 import csv
 
 from django.contrib.contenttypes.models import ContentType
-from django.core.serializers import json
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.views.generic import View
 from django.views.generic.edit import FormMixin
 
@@ -54,7 +53,7 @@ class CSVView(View):
 
 
 class JSONResponseView(View):
-    response_class = HttpResponse
+    response_class = JsonResponse
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
@@ -62,11 +61,7 @@ class JSONResponseView(View):
 
     def render_to_response(self, context, **response_kwargs):
         """Simple render to JSON"""
-        return self.response_class(
-            json.json.dumps(self.get_context_data(**self.kwargs),
-                            cls=json.DjangoJSONEncoder, ensure_ascii=False),
-            mimetype='application/json',
-        )
+        return self.response_class(self.get_context_data(**self.kwargs))
 
 
 class AddGenericMixin(FormMixin):
