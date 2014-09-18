@@ -79,9 +79,14 @@ class AddGenericMixin(FormMixin):
     content_type_id_key = 'content_type_id'
     object_id_key = 'pk'
 
+    # Default model field names
+    content_object_field_name = 'content_object'
+    content_type_field_name = 'content_type'
+    object_id_field_name = 'object_id'
+
     def get_context_data(self, **kwargs):
         context = super(AddGenericMixin, self).get_context_data(**kwargs)
-        context['content_object'] = self.get_content_object()
+        context[self.content_object_field_name] = self.get_content_object()
         return context
 
     def get_object_id_key(self):
@@ -113,7 +118,7 @@ class AddGenericMixin(FormMixin):
         except KeyError:
             raise Http404
         initial.update({
-            'content_type': content_type,
-            'object_id': object_id,
+            self.content_type_field_name: content_type,
+            self.object_id_field_name: object_id,
         })
         return initial
