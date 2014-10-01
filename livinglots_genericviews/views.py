@@ -100,12 +100,14 @@ class AddGenericMixin(FormMixin):
         return self.content_type_id_key
 
     def get_content_object(self):
-        kwargs = {}
-        if self.get_object_slug_key() and self.object_slug_field_name:
-            kwargs[self.object_slug_field_name] = self.kwargs[self.get_object_slug_key()]
-        else:
-            kwargs['pk'] = self.kwargs[self.get_object_id_key()]
-        return self.get_content_type().get_object_for_this_type(**kwargs)
+        try:
+            return self.get_content_type().get_object_for_this_type(**{
+                self.object_slug_field_name: self.kwargs[self.get_object_slug_key()]
+            })
+        except Exception:
+            return self.get_content_type().get_object_for_this_type(
+                pk=self.kwargs[self.get_object_id_key()]
+            )
 
     def get_content_object_id(self):
         return self.get_content_object().pk
