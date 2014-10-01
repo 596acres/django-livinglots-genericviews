@@ -74,6 +74,12 @@ class AddGenericMixin(FormMixin):
     content_type_id_key = 'content_type_id'
     object_id_key = 'pk'
 
+    # The key for the slug in the view's kwargs (if any)
+    object_slug_key = None
+
+    # The model's slug field (if any)
+    object_slug_field_name = None
+
     # Default model field names
     content_object_field_name = 'content_object'
     content_type_field_name = 'content_type'
@@ -87,16 +93,22 @@ class AddGenericMixin(FormMixin):
     def get_object_id_key(self):
         return self.object_id_key
 
+    def get_object_slug_key(self):
+        return self.object_slug_key
+
     def get_content_type_id_key(self):
         return self.content_type_id_key
 
     def get_content_object(self):
-        return self.get_content_type().get_object_for_this_type(
-            pk=self.get_content_object_id()
-        )
+        kwargs = {}
+        if self.get_object_slug_key() and self.object_slug_field_name:
+            kwargs[self.object_slug_field_name] = self.kwargs[self.get_object_slug_key()]
+        else:
+            kwargs['pk'] = self.kwargs[self.get_object_id_key()]
+        return self.get_content_type().get_object_for_this_type(**kwargs)
 
     def get_content_object_id(self):
-        return self.kwargs[self.get_object_id_key()]
+        return self.get_content_object().pk
 
     def get_content_type(self):
         if self.content_type_model:
@@ -109,7 +121,7 @@ class AddGenericMixin(FormMixin):
         initial = super(AddGenericMixin, self).get_initial()
         try:
             content_type = self.get_content_type()
-            object_id = self.kwargs[self.get_object_id_key()]
+            object_id = self.get_content_object_id()
         except KeyError:
             raise Http404
         initial.update({
