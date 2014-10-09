@@ -45,7 +45,7 @@ class CSVView(View):
         """
         Simple render to CSV.
         """
-        response = self.response_class(mimetype='text/csv')
+        response = self.response_class(content_type='text/csv')
         response['Content-Disposition'] = ('attachment; filename="%s.csv"' %
                                            self.get_filename())
         self.write_csv(response)
