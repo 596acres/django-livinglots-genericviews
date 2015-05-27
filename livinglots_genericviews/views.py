@@ -124,7 +124,7 @@ class AddGenericMixin(FormMixin):
         try:
             content_type = self.get_content_type()
             object_id = self.get_content_object_id()
-        except KeyError:
+        except (KeyError, content_type.model_class().DoesNotExist):
             raise Http404
         initial.update({
             self.content_type_field_name: content_type,
