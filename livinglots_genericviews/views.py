@@ -1,4 +1,4 @@
-import csv
+import unicodecsv as csv
 
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404, HttpResponse, JsonResponse
