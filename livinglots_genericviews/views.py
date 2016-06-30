@@ -61,7 +61,8 @@ class JSONResponseView(View):
 
     def render_to_response(self, context, **response_kwargs):
         """Simple render to JSON"""
-        return self.response_class(self.get_context_data(**self.kwargs))
+        return self.response_class(self.get_context_data(**self.kwargs),
+                safe=False)
 
 
 class AddGenericMixin(FormMixin):
