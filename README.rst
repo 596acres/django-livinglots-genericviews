@@ -1,7 +1,10 @@
 django-livinglots-genericviews
 ==============
 
-A set of helpers views for projects that use 596 Acres' Living Lots.
+A set of helper views for projects that use 596 Acres' ® Living Lots ®.
+
+This module is part of the `Living Lots <https://github.com/596acres/django-livinglots>`_ framework by `596 Acres
+<https://596acres.org>`_.
 
 
 License
