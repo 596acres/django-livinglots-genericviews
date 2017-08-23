@@ -29,12 +29,16 @@ class CSVView(View):
         """
         raise NotImplementedError
 
+    def get_header_name(self, field):
+        """Get the column header name for this field."""
+        return field.replace('_', ' ')
+
     def write_csv(self, response):
         fields = self.get_fields()
         csv_file = csv.DictWriter(response, fields)
 
         # Write header
-        response.write(','.join(['%s' % field.replace('_', ' ') for field in fields]))
+        response.write(','.join([self.get_header_name(field) for field in fields]))
         response.write('\n')
 
         # Write rows
